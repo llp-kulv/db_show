@@ -1,0 +1,13 @@
+<resources>
+    <dimen name="textandiconmargin">10dp</dimen>
+    <dimen name="footer_progress_width">35dp</dimen>
+    <dimen name="padding_size">10dp</dimen>
+
+    <dimen name="title_big_size">18sp</dimen>
+    <dimen name="title_normal_size">16sp</dimen>
+    <dimen name="title_small_size">14sp</dimen>
+    <dimen name="title_smaller_size">12sp</dimen>
+
+    <dimen name="padding_horizontal">15dp</dimen>
+    <dimen name="padding_min">5dp</dimen>
+</resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@id/surplus_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@id/all_surplus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="剩余总量" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@id/out_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@id/all_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="领取详情" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@id/in_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@id/all_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="所有采购"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@id/other_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@id/other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="其他" />
+    </RelativeLayout>
+
+</LinearLayout>

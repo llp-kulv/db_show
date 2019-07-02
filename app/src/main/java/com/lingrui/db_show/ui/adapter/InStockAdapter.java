@@ -1,0 +1,91 @@
+package com.lingrui.db_show.ui.adapter;
+
+
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.lingrui.db_show.R;
+import com.lingrui.db_show.dbbean.InStockBean;
+import com.lingrui.db_show.util.CollectionUtil;
+import com.lingrui.db_show.util.Flog;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class InStockAdapter extends RecyclerView.Adapter<InStockAdapter.ViewHolder> {
+    private final Context mContext;
+    private final List<InStockBean> mData = new ArrayList<>();
+
+    public InStockAdapter(Context mContext, List<InStockBean> list) {
+        this.mContext = mContext;
+        this.mData.clear();
+        if (CollectionUtil.isNotEmpty(list)) {
+            this.mData.addAll(list);
+        }
+
+        Flog.d("InStockAdapter", "size:" + this.mData.size());
+    }
+
+    public void updateData(List<InStockBean> list) {
+        if (CollectionUtil.isEmpty(list)) {
+            return;
+        }
+
+        this.mData.clear();
+        mData.addAll(list);
+        notifyDataSetChanged();
+    }
+
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_consumption, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+        InStockBean infoBean = mData.get(position);
+        if (infoBean == null) {
+            return;
+        }
+
+        if (infoBean.getIn_count() > 0) {
+            viewHolder.nameTv.setText(infoBean.getProduct_name());
+            viewHolder.countTv.setText(String.valueOf(infoBean.getIn_count()));
+            if (!TextUtils.isEmpty(infoBean.getIn_time())) {
+                viewHolder.timeTv.setText(infoBean.getIn_time());
+            }
+            if (!TextUtils.isEmpty(infoBean.getIn_info())) {
+                viewHolder.infoTv.setText(infoBean.getIn_info());
+            }
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return mData.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView nameTv;
+        TextView countTv;
+        TextView timeTv;
+        TextView infoTv;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            nameTv = itemView.findViewById(R.id.product_name_tv);
+            countTv = itemView.findViewById(R.id.product_count_tv);
+            timeTv = itemView.findViewById(R.id.time_tv);
+            infoTv = itemView.findViewById(R.id.info_tv);
+        }
+    }
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="left_icon_iv" type="id" />
+    <item name="title_layout" type="id" />
+    <item name="title_tv" type="id" />
+    <item name="right_tv" type="id" />
+
+    <item name="all_surplus" type="id" />
+    <item name="all_out" type="id" />
+    <item name="all_in" type="id" />
+    <item name="other" type="id" />
+    <item name="surplus_layout" type="id" />
+    <item name="out_layout" type="id" />
+    <item name="in_layout" type="id" />
+    <item name="other_layout" type="id" />
+</resources>

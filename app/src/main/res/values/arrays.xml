@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="product_list">
+        <item>@string/click_select_product</item>
+        <item>笔</item>
+        <item>本子</item>
+        <item>盆子</item>
+        <item>凳子</item>
+        <item>椅子</item>
+    </string-array>
+</resources>

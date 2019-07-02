@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">db_show</string>
+    <string name="click_select_product">点击选择产品</string>
+    <string name="text_negative">Cancel</string>
+    <string name="text_positive">Exit</string>
+    <string name="text_content_exit">Want to exit this app?</string>
+    <string name="text_title">Tip</string>
+    <string name="sign_fail">login fail</string>
+    <!-- xRecyclerView start -->
+    <string name="listview_header_hint_normal">pull to refresh</string>
+    <string name="listview_header_hint_release">release to start refresh</string>
+    <string name="listview_loading">loading...</string>
+    <string name="nomore_loading">no more to be loaded</string>
+    <string name="refreshing">refreshing...</string>
+    <string name="refresh_done">refresh done</string>
+    <string name="loading_done">loading done</string>
+    <string name="listview_header_last_time">last update：</string>
+    <bool name="xrecyclerview_refresh_sound">true</bool>
+    <string name="loading">loading...</string>
+    <!-- xRecyclerView end -->
+</resources>
