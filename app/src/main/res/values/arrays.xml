@@ -8,4 +8,11 @@
         <item>凳子</item>
         <item>椅子</item>
     </string-array>
+
+    <string-array name="data_type_list">
+        <item>@string/click_select_type</item>
+        <item>剩余量的数据</item>
+        <item>所有的采购</item>
+        <item>所有的领取</item>
+    </string-array>
 </resources>

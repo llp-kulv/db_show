@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">db_show</string>
     <string name="click_select_product">点击选择产品</string>
+    <string name="click_select_type">点击选择导出的数据类型</string>
     <string name="text_negative">Cancel</string>
     <string name="text_positive">Exit</string>
     <string name="text_content_exit">Want to exit this app?</string>
@@ -18,4 +19,10 @@
     <bool name="xrecyclerview_refresh_sound">true</bool>
     <string name="loading">loading...</string>
     <!-- xRecyclerView end -->
+
+    <string name="export_file_result">导出文件成功</string>
+    <string name="export_success">导出成功</string>
+    <string name="export_fail">导出失败</string>
+    <string name="export_file_path_">导出成功</string>
+    <string name="need_select_type">必须选择到出数据的类型</string>
 </resources>

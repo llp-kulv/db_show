@@ -1,6 +1,7 @@
 package com.lingrui.db_show.ui.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,7 @@ import com.lingrui.db_show.dbbean.InStockBean;
 import com.lingrui.db_show.dbbean.OutStockBean;
 import com.lingrui.db_show.dbbean.ProductInfoBean;
 import com.lingrui.db_show.manager.DatabaseManager;
+import com.lingrui.db_show.ui.activity.ExportActivity;
 import com.lingrui.db_show.ui.activity.MainActivity;
 import com.lingrui.db_show.util.DateUtils;
 import com.lingrui.db_show.util.Flog;
@@ -37,6 +39,9 @@ public class OtherFragment extends MainBaseFragment {
 
     @ViewInject(R.id.add_select_sp)
     private Spinner add_select_sp;
+
+    @ViewInject(R.id.export_excel_btn)
+    private Button export_excel_btn;
 
     @ViewInject(R.id.add_count_tv)
     private EditText add_count_tv;
@@ -180,12 +185,18 @@ public class OtherFragment extends MainBaseFragment {
         reset();
     }
 
-    private void reset(){
+    private void reset() {
         add_select_sp.setSelection(0);
         add_select_sp.setSelection(0);
         add_info_tv.setText(null);
         consumption_info_tv.setText(null);
         consumption_count_tv.setText(null);
         add_count_tv.setText(null);
+    }
+
+    @Event(R.id.export_excel_btn)
+    private void clickExport(View view) {
+        Intent exportIntent = new Intent(getActivity(), ExportActivity.class);
+        startActivity(exportIntent);
     }
 }
