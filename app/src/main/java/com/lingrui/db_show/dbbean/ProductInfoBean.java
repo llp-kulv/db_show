@@ -11,17 +11,6 @@ public class ProductInfoBean extends BaseBean {
     @Column(name = "product_type")
     private String product_type;
 
-    @Column(name = "current_count")
-    private int current_count;
-
-    public String getProduct_name() {
-        return product_name;
-    }
-
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
-    }
-
     public String getProduct_id() {
         return product_id;
     }
@@ -38,21 +27,17 @@ public class ProductInfoBean extends BaseBean {
         this.product_type = product_type;
     }
 
-    public int getCurrent_count() {
-        return current_count;
-    }
-
-    public void setCurrent_count(int current_count) {
-        this.current_count = current_count;
-    }
-
     @Override
     public String toString() {
         return "ProductInfoBean{" +
-                "product_name='" + product_name + '\'' +
-                ", product_id='" + product_id + '\'' +
+                "product_id='" + product_id + '\'' +
                 ", product_type='" + product_type + '\'' +
-                ", current_count=" + current_count +
+                ", product_name='" + product_name + '\'' +
+                ", product_price='" + product_price + '\'' +
+                ", product_total_price='" + product_total_price + '\'' +
+                ", product_count=" + product_count +
+                ", product_time='" + product_time + '\'' +
+                ", info='" + info + '\'' +
                 '}';
     }
 }

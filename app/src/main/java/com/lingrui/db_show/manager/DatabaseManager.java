@@ -69,7 +69,7 @@ public class DatabaseManager {
 
             ProductInfoBean productInfoBean = new ProductInfoBean();
             productInfoBean.setProduct_name(inStockBean.getProduct_name());
-            productInfoBean.setCurrent_count(inStockBean.getIn_count());
+            productInfoBean.setProduct_count(inStockBean.getProduct_count());
             DdApplication.getInstance().getDbManager().save(productInfoBean);
         } catch (DbException e) {
             Flog.d(TAG, "save InStockBean one fail exception:" + e);
@@ -89,8 +89,8 @@ public class DatabaseManager {
             builder.and("product_name", "=", outStockBean.getProduct_name());
             ProductInfoBean infoBean = dbManager.selector(ProductInfoBean.class).where(builder).findFirst();
 
-            infoBean.setCurrent_count(infoBean.getCurrent_count() - outStockBean.getOut_count());
-            Flog.d(TAG, "总量" + infoBean.getCurrent_count() + " 领取:" + outStockBean.getOut_count() + " infoBean:" + infoBean);
+            infoBean.setProduct_count(infoBean.getProduct_count() - outStockBean.getProduct_count());
+            Flog.d(TAG, "总量" + infoBean.getProduct_count() + " 领取:" + outStockBean.getProduct_count() + " infoBean:" + infoBean);
             dbManager.update(infoBean);
         } catch (DbException e) {
             Flog.d(TAG, "save addOutStock one fail exception:" + e);

@@ -57,14 +57,14 @@ public class ConsumptionAdapter extends RecyclerView.Adapter<ConsumptionAdapter.
             return;
         }
 
-        if (infoBean.getOut_count() > 0) {
+        if (infoBean.getProduct_count() > 0) {
             viewHolder.nameTv.setText(infoBean.getProduct_name());
-            viewHolder.countTv.setText(String.valueOf(infoBean.getOut_count()));
-            if (!TextUtils.isEmpty(infoBean.getOut_time())) {
-                viewHolder.timeTv.setText(infoBean.getOut_time());
+            viewHolder.countTv.setText(String.valueOf(infoBean.getProduct_count()));
+            if (!TextUtils.isEmpty(infoBean.getProduct_time())) {
+                viewHolder.timeTv.setText(infoBean.getProduct_time());
             }
-            if (!TextUtils.isEmpty(infoBean.getOut_info())) {
-                viewHolder.infoTv.setText(infoBean.getOut_info());
+            if (!TextUtils.isEmpty(infoBean.getInfo())) {
+                viewHolder.infoTv.setText(infoBean.getInfo());
             }
         }
     }

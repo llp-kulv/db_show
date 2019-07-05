@@ -57,14 +57,14 @@ public class InStockAdapter extends RecyclerView.Adapter<InStockAdapter.ViewHold
             return;
         }
 
-        if (infoBean.getIn_count() > 0) {
+        if (infoBean.getProduct_count() > 0) {
             viewHolder.nameTv.setText(infoBean.getProduct_name());
-            viewHolder.countTv.setText(String.valueOf(infoBean.getIn_count()));
-            if (!TextUtils.isEmpty(infoBean.getIn_time())) {
-                viewHolder.timeTv.setText(infoBean.getIn_time());
+            viewHolder.countTv.setText(String.valueOf(infoBean.getProduct_count()));
+            if (!TextUtils.isEmpty(infoBean.getProduct_time())) {
+                viewHolder.timeTv.setText(infoBean.getProduct_time());
             }
-            if (!TextUtils.isEmpty(infoBean.getIn_info())) {
-                viewHolder.infoTv.setText(infoBean.getIn_info());
+            if (!TextUtils.isEmpty(infoBean.getInfo())) {
+                viewHolder.infoTv.setText(infoBean.getInfo());
             }
         }
     }

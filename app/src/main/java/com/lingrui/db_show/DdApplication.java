@@ -3,6 +3,7 @@ package com.lingrui.db_show;
 import android.app.Application;
 
 import com.lingrui.db_show.manager.DbInfo;
+import com.lingrui.db_show.manager.ProductManager;
 import com.lingrui.db_show.util.Flog;
 
 import org.xutils.DbManager;
@@ -12,6 +13,7 @@ import org.xutils.x;
 public class DdApplication extends Application {
     private static final String TAG = "DdApplication";
     private DbManager mDbManager;
+    private ProductManager mProductManager;
     private static DdApplication mDdApplication;
 
     public static DdApplication getInstance() {
@@ -24,6 +26,7 @@ public class DdApplication extends Application {
         mDdApplication = this;
 
         initXUtils();
+        mProductManager = new ProductManager(this);
     }
 
     private void initXUtils() {
@@ -74,5 +77,9 @@ public class DdApplication extends Application {
 
     public DbManager getDbManager() {
         return mDbManager;
+    }
+
+    public ProductManager getProductManager() {
+        return mProductManager;
     }
 }

@@ -52,7 +52,7 @@
             android:layout_centerInParent="true"
             android:src="@drawable/iconfont_downgrey" />
 
-        <com.lingrui.db_show.xrecyler.SimpleViewSwitcher
+        <com.lingrui.db_show.widget.xrecyler.SimpleViewSwitcher
             android:id="@+id/listview_header_progressbar"
             android:layout_width="35dp"
             android:layout_height="35dp"

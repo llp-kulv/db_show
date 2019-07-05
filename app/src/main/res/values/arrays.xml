@@ -9,6 +9,15 @@
         <item>椅子</item>
     </string-array>
 
+    <string-array name="product_name_list">
+        <item>名称</item>
+        <item>单价</item>
+        <item>数量</item>
+        <item>总价</item>
+        <item>@string/col_date</item>
+        <item>备注</item>
+    </string-array>
+
     <string-array name="data_type_list">
         <item>@string/click_select_type</item>
         <item>剩余量的数据</item>

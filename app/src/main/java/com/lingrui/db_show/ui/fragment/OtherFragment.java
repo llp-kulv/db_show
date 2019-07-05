@@ -134,9 +134,9 @@ public class OtherFragment extends MainBaseFragment {
 
         InStockBean bean = new InStockBean();
         bean.setProduct_name(addSelectText);
-        bean.setIn_count(Integer.parseInt(count));
-        bean.setIn_time(DateUtils.dateToStrLong(new Date()));
-        bean.setIn_info(add_info_tv.getText().toString());
+        bean.setProduct_count(Integer.parseInt(count));
+        bean.setProduct_time(DateUtils.dateToStrLong(new Date()));
+        bean.setInfo(add_info_tv.getText().toString());
         DatabaseManager.getInstance().addInStock(bean);
 
         ScreenUtils.hideSoftKeyboardIfShow(getActivity());
@@ -155,16 +155,16 @@ public class OtherFragment extends MainBaseFragment {
 
         OutStockBean bean = new OutStockBean();
         bean.setProduct_name(consumptionSelectText);
-        bean.setOut_count(Integer.parseInt(count));
-        bean.setOut_time(DateUtils.dateToStrLong(new Date()));
-        bean.setOut_info(consumption_info_tv.getText().toString());
+        bean.setProduct_count(Integer.parseInt(count));
+        bean.setProduct_time(DateUtils.dateToStrLong(new Date()));
+        bean.setInfo(consumption_info_tv.getText().toString());
 
         WhereBuilder builder = WhereBuilder.b();
         builder.and("product_name", "=", bean.getProduct_name());
         ProductInfoBean infoBean = DatabaseManager.getInstance().getSurplusInfo(builder);
-        if (infoBean == null || bean.getOut_count() > infoBean.getCurrent_count()) {
+        if (infoBean == null || bean.getProduct_count() > infoBean.getProduct_count()) {
             if (infoBean != null) {
-                Flog.d(TAG, "consumption productInfoBeans 库存总数size:" + infoBean.getCurrent_count());
+                Flog.d(TAG, "consumption productInfoBeans 库存总数size:" + infoBean.getProduct_count());
             }
             Toast.makeText(getContext(), "无法领取的产品，因为领取数量超过库存数量", Toast.LENGTH_SHORT).show();
             return;

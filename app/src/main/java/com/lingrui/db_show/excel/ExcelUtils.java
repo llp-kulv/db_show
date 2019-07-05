@@ -1,8 +1,9 @@
 package com.lingrui.db_show.excel;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.support.annotation.NonNull;
 
+import com.lingrui.db_show.R;
 import com.lingrui.db_show.util.CollectionUtil;
 
 import java.io.File;
@@ -11,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import jxl.Cell;
@@ -233,5 +233,9 @@ public class ExcelUtils {
             e.printStackTrace();
         }
         return value;
+    }
+
+    public static String[] getHeadNames(@NonNull Context context) {
+        return context.getResources().getStringArray(R.array.product_name_list);
     }
 }

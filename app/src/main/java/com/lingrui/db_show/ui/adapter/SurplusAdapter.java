@@ -56,9 +56,9 @@ public class SurplusAdapter extends RecyclerView.Adapter<SurplusAdapter.ViewHold
             return;
         }
 
-        if (infoBean.getCurrent_count() > 0) {
+        if (infoBean.getProduct_count() > 0) {
             viewHolder.nameTv.setText(infoBean.getProduct_name());
-            viewHolder.countTv.setText(String.valueOf(infoBean.getCurrent_count()));
+            viewHolder.countTv.setText(String.valueOf(infoBean.getProduct_count()));
         }
     }
 

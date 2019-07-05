@@ -5,7 +5,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.lingrui.db_show.xrecyler.XRecyclerView
+    <com.lingrui.db_show.widget.xrecyler.XRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

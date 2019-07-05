@@ -25,4 +25,6 @@
     <string name="export_fail">导出失败</string>
     <string name="export_file_path_">导出成功</string>
     <string name="need_select_type">必须选择到出数据的类型</string>
+
+    <string name="col_date">日期</string>
 </resources>

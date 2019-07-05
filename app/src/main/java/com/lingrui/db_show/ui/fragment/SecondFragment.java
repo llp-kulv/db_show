@@ -10,8 +10,8 @@ import com.lingrui.db_show.ui.adapter.ConsumptionAdapter;
 import com.lingrui.db_show.util.CollectionUtil;
 import com.lingrui.db_show.util.Flog;
 import com.lingrui.db_show.util.ScreenUtils;
-import com.lingrui.db_show.xrecyler.SpaceItemDecoration;
-import com.lingrui.db_show.xrecyler.XRecyclerView;
+import com.lingrui.db_show.widget.xrecyler.SpaceItemDecoration;
+import com.lingrui.db_show.widget.xrecyler.XRecyclerView;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
