@@ -44,6 +44,7 @@ public class BaseActivity extends AppCompatActivity {
         mFragmentManager = getSupportFragmentManager();
         initTitle();
         createView();
+
         KdActivityManager.getInstance().addActivity(this);
     }
 
