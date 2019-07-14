@@ -11,10 +11,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.lingrui.db_show.DdApplication;
 import com.lingrui.db_show.R;
 import com.lingrui.db_show.dbbean.InStockBean;
 import com.lingrui.db_show.dbbean.OutStockBean;
 import com.lingrui.db_show.dbbean.ProductInfoBean;
+import com.lingrui.db_show.dbbean.TestBean;
 import com.lingrui.db_show.manager.DatabaseManager;
 import com.lingrui.db_show.ui.activity.ExportActivity;
 import com.lingrui.db_show.ui.activity.MainActivity;
@@ -22,12 +24,15 @@ import com.lingrui.db_show.util.DateUtils;
 import com.lingrui.db_show.util.Flog;
 import com.lingrui.db_show.util.ScreenUtils;
 
+import org.xutils.DbManager;
 import org.xutils.db.sqlite.WhereBuilder;
+import org.xutils.ex.DbException;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.Date;
+import java.util.List;
 
 @ContentView(R.layout.fragment_other)
 public class OtherFragment extends MainBaseFragment {
@@ -46,6 +51,9 @@ public class OtherFragment extends MainBaseFragment {
     @ViewInject(R.id.add_count_tv)
     private EditText add_count_tv;
 
+    @ViewInject(R.id.add_price_tv)
+    private EditText add_price_tv;
+
     @ViewInject(R.id.add_stock)
     private Button add_stock;
 
@@ -56,6 +64,9 @@ public class OtherFragment extends MainBaseFragment {
 
     @ViewInject(R.id.consumption_count_tv)
     private EditText consumption_count_tv;
+
+    @ViewInject(R.id.consumption_price_tv)
+    private EditText consumption_price_tv;
 
     @ViewInject(R.id.consumption_info_tv)
     private EditText consumption_info_tv;
@@ -127,15 +138,19 @@ public class OtherFragment extends MainBaseFragment {
     @Event(R.id.add_stock)
     private void addStock(View view) {
         String count = add_count_tv.getText().toString().trim();
-        if (TextUtils.isEmpty(addSelectText) || TextUtils.isEmpty(count)) {
-            Toast.makeText(getContext(), "必须选择产品和数量", Toast.LENGTH_SHORT).show();
+        String price = add_price_tv.getText().toString().trim();
+        if (TextUtils.isEmpty(addSelectText) || TextUtils.isEmpty(count) || TextUtils.isEmpty(price)) {
+            Toast.makeText(getContext(), R.string.tip_input_info, Toast.LENGTH_SHORT).show();
             return;
         }
+
+        price = handlePrice(price);
 
         InStockBean bean = new InStockBean();
         bean.setProduct_name(addSelectText);
         bean.setProduct_count(Integer.parseInt(count));
         bean.setProduct_time(DateUtils.dateToStrLong(new Date()));
+        bean.setProduct_price(Double.valueOf(price));
         bean.setInfo(add_info_tv.getText().toString());
         DatabaseManager.getInstance().addInStock(bean);
 
@@ -147,11 +162,13 @@ public class OtherFragment extends MainBaseFragment {
     @Event(R.id.consumption_stock)
     private void consumptionStock(View view) {
         String count = consumption_count_tv.getText().toString().trim();
-        Flog.d(TAG, "consumptionStock consumptionSelectText:" + consumptionSelectText + " count:" + count);
-        if (TextUtils.isEmpty(consumptionSelectText) || TextUtils.isEmpty(count)) {
-            Toast.makeText(getContext(), "必须选择产品和数量", Toast.LENGTH_SHORT).show();
+        String price = consumption_price_tv.getText().toString().trim();
+        if (TextUtils.isEmpty(consumptionSelectText) || TextUtils.isEmpty(count) || TextUtils.isEmpty(price)) {
+            Toast.makeText(getContext(), R.string.tip_input_info, Toast.LENGTH_SHORT).show();
             return;
         }
+
+        price = handlePrice(price);
 
         OutStockBean bean = new OutStockBean();
         bean.setProduct_name(consumptionSelectText);
@@ -192,6 +209,8 @@ public class OtherFragment extends MainBaseFragment {
         consumption_info_tv.setText(null);
         consumption_count_tv.setText(null);
         add_count_tv.setText(null);
+        add_price_tv.setText(null);
+        consumption_price_tv.setText(null);
     }
 
     @Event(R.id.export_excel_btn)
@@ -199,4 +218,38 @@ public class OtherFragment extends MainBaseFragment {
         Intent exportIntent = new Intent(getActivity(), ExportActivity.class);
         startActivity(exportIntent);
     }
+
+
+    private String handlePrice(String sourcePrice) {
+        if (sourcePrice.startsWith(".")) {
+            sourcePrice = "0" + sourcePrice;
+        }
+
+        if (!sourcePrice.contains(".")) {
+            return sourcePrice;
+        }
+
+        String[] sp = sourcePrice.split("\\.");
+        String suffix = sp[1];
+        if (suffix.length() <= 2) {
+            return sourcePrice;
+        }
+
+        int pre = Integer.parseInt(sp[0]);
+        String dotTwoStr = sp[1].substring(0, 2);
+        int dotTwoNumber = Integer.parseInt(dotTwoStr);
+
+        int newTwoNumber = dotTwoNumber + 1;
+        if (newTwoNumber < 100) {
+            return pre + "." + newTwoNumber;
+        }
+
+        return (pre + 1) + "";
+    }
+
+//    public static void main(String[] args){
+//        String ss = handlePrice(".193");
+//        System.out.println("ss:"+ss);
+//    }
+
 }

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">db_show</string>
-    <string name="click_select_product">点击选择产品</string>
+    <string name="click_select_product">选择产品</string>
     <string name="click_select_type">点击选择导出的数据类型</string>
     <string name="text_negative">Cancel</string>
     <string name="text_positive">Exit</string>
@@ -27,4 +27,6 @@
     <string name="need_select_type">必须选择到出数据的类型</string>
 
     <string name="col_date">日期</string>
+
+    <string name="tip_input_info">必须选择产品,数量和单价</string>
 </resources>

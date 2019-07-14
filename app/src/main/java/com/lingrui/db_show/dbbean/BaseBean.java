@@ -1,21 +1,23 @@
 package com.lingrui.db_show.dbbean;
 
+import com.lingrui.panellistlibrary.defaultcontent.IDBData;
+
 import org.xutils.db.annotation.Column;
 
 import java.io.Serializable;
 
-public class BaseBean implements Serializable {
-    @Column(name = "_id", isId = true, autoGen = true)
+public class BaseBean implements Serializable, IDBData {
+    @Column(name = "_id", isId = true)
     public int _id;
 
     @Column(name = "product_name")
     public String product_name;
 
     @Column(name = "product_price")
-    public String product_price;
+    public double product_price;
 
     @Column(name = "product_total_price")
-    public String product_total_price;
+    public double product_total_price;
 
     @Column(name = "product_count")
     public int product_count;
@@ -54,19 +56,21 @@ public class BaseBean implements Serializable {
         this.product_name = product_name;
     }
 
-    public String getProduct_price() {
+    public double getProduct_price() {
+
         return product_price;
     }
 
-    public void setProduct_price(String product_price) {
+    public void setProduct_price(double product_price) {
         this.product_price = product_price;
+        setProduct_total_price(product_price * product_count);
     }
 
-    public String getProduct_total_price() {
+    public double getProduct_total_price() {
         return product_total_price;
     }
 
-    public void setProduct_total_price(String product_total_price) {
+    public void setProduct_total_price(double product_total_price) {
         this.product_total_price = product_total_price;
     }
 
@@ -76,6 +80,7 @@ public class BaseBean implements Serializable {
 
     public void setProduct_count(int product_count) {
         this.product_count = product_count;
+        setProduct_total_price(product_price * product_count);
     }
 
     public String getProduct_time() {

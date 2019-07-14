@@ -238,4 +238,8 @@ public class ExcelUtils {
     public static String[] getHeadNames(@NonNull Context context) {
         return context.getResources().getStringArray(R.array.product_name_list);
     }
+
+    public static int[] getHeadWidth(@NonNull Context context) {
+        return context.getResources().getIntArray(R.array.product_name_width);
+    }
 }

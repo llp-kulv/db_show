@@ -4,11 +4,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/export_excel_btn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="跳转到导出页面" />
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/export_excel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="跳转到导出页面" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginTop="5dip"
+        android:background="@color/blue" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginTop="2dip"
+        android:background="@color/blue" />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,7 +48,7 @@
 
             <Spinner
                 android:id="@+id/add_select_sp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:entries="@array/product_list"
@@ -37,23 +57,27 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/add_count_layout"
+        <EditText
+            android:id="@+id/add_count_tv"
+            android:layout_toRightOf="@+id/add_left_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:hint="输入数量"
+            android:maxLength="6"
+            android:inputType="number"
+            android:minHeight="50dip" />
 
-            <EditText
-                android:id="@+id/add_count_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:hint="输入数量"
-                android:inputType="number"
-                android:minHeight="50dip" />
-        </LinearLayout>
+        <EditText
+            android:id="@+id/add_price_tv"
+            android:layout_toRightOf="@+id/add_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="输入单价(元)"
+            android:maxLength="6"
+            android:inputType="numberDecimal"
+            android:minHeight="50dip" />
 
         <LinearLayout
             android:id="@+id/add_right_layout"
@@ -73,15 +97,6 @@
                 android:hint="填写入库备注信息"
                 android:minHeight="50dip" />
         </LinearLayout>
-
-        <View
-            android:layout_width="1dip"
-            android:layout_height="30dip"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dip"
-            android:layout_toLeftOf="@+id/add_right_layout"
-            android:background="@color/blue"
-            android:paddingLeft="10dip" />
     </RelativeLayout>
 
     <Button
@@ -96,6 +111,12 @@
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:layout_marginTop="5dip"
+        android:background="@color/blue" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginTop="2dip"
         android:background="@color/blue" />
 
 
@@ -116,7 +137,7 @@
 
             <Spinner
                 android:id="@+id/consumption_select_sp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/consumption_left_layout"
                 android:layout_gravity="left"
@@ -125,23 +146,27 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/consumption_count_layout"
+        <EditText
+            android:id="@+id/consumption_count_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right"
-            android:orientation="vertical">
+            android:layout_toRightOf="@+id/consumption_left_layout"
+            android:gravity="center"
+            android:hint="输入数量"
+            android:maxLength="6"
+            android:inputType="number"
+            android:minHeight="50dip" />
 
-            <EditText
-                android:id="@+id/consumption_count_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:hint="输入数量"
-                android:inputType="number"
-                android:minHeight="50dip" />
-        </LinearLayout>
+        <EditText
+            android:id="@+id/consumption_price_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/consumption_count_tv"
+            android:gravity="center"
+            android:hint="输入单价(元)"
+            android:inputType="numberDecimal"
+            android:maxLength="6"
+            android:minHeight="50dip" />
 
         <LinearLayout
             android:id="@+id/consumption_right_layout"
@@ -161,14 +186,6 @@
                 android:minHeight="50dip" />
         </LinearLayout>
 
-        <View
-            android:layout_width="1dip"
-            android:layout_height="30dip"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dip"
-            android:layout_toLeftOf="@+id/consumption_right_layout"
-            android:background="@color/blue"
-            android:paddingLeft="10dip" />
     </RelativeLayout>
 
     <Button

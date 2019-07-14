@@ -187,6 +187,13 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        int activeSize = KdActivityManager.getInstance().getActiveSize();
+        Flog.d(TAG, "onBackPressed activeSize:" + activeSize);
+        if(activeSize > 1){
+            super.onBackPressed();
+            return;
+        }
+
         final CustomAlertDialog dialog = new CustomAlertDialog(this);
         dialog.builder().setCanceledOnTouchOutside(false)
                 .setContent(R.string.text_content_exit)

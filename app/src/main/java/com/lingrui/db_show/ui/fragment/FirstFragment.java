@@ -1,37 +1,38 @@
 package com.lingrui.db_show.ui.fragment;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.TextUtils;
-import android.util.Log;
-import android.util.SparseArray;
-import android.view.Gravity;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.lingrui.db_show.DdApplication;
 import com.lingrui.db_show.R;
-import com.lingrui.db_show.contant.ExcelSize;
+import com.lingrui.db_show.dbbean.BaseBean;
 import com.lingrui.db_show.dbbean.ProductInfoBean;
+import com.lingrui.db_show.excel.AbstractDBPanelListAdapter;
 import com.lingrui.db_show.excel.ExcelUtils;
 import com.lingrui.db_show.manager.DatabaseManager;
-import com.lingrui.db_show.ui.adapter.SurplusAdapter;
 import com.lingrui.db_show.util.CollectionUtil;
 import com.lingrui.db_show.util.Flog;
-import com.lingrui.db_show.util.ScreenUtils;
-import com.lingrui.db_show.widget.excel.ExcelView;
-import com.lingrui.db_show.widget.excel.ExcelViewFragmentTest;
-import com.lingrui.db_show.widget.xrecyler.SpaceItemDecoration;
-import com.lingrui.db_show.widget.xrecyler.XRecyclerView;
+import com.lingrui.panellistlibrary.AbstractPanelListAdapter;
+import com.lingrui.panellistlibrary.PanelListLayout;
+import com.lingrui.panellistlibrary.defaultcontent.DBContentAdapter;
+import com.lingrui.panellistlibrary.defaultcontent.IDBData;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-@ContentView(R.layout.fragment_first)
+@ContentView(R.layout.activity_main)
 public class FirstFragment extends MainBaseFragment {
     private static final String TAG = "FirstFragment";
 
@@ -39,159 +40,294 @@ public class FirstFragment extends MainBaseFragment {
         return new FirstFragment();
     }
 
-    @ViewInject(R.id.excelView)
-    private ExcelView excelView;
+    @ViewInject(R.id.id_pl_root)
+    private PanelListLayout pl_root;
 
-    private FirstAdapter surplusAdapter = null;
-    static int col = 10, row = 20;
-    static String[] headNameArr = null;
+    @ViewInject(R.id.id_lv_content)
+    private ListView lv_content;
+
+    private AbstractPanelListAdapter adapter;
+
+    private List<List<String>> contentList = new ArrayList<>();
+    private List<IDBData> contentBeanList = new ArrayList<IDBData>();
+
+    private List<Integer> itemWidthList = new ArrayList<>();
+
+    private List<String> rowDataList = new ArrayList<>();
+
 
     @Override
     protected void createView(View view) {
-        headNameArr = ExcelUtils.getHeadNames(getContext());
-        col = headNameArr.length;
-        List<ProductInfoBean> list = DatabaseManager.getInstance().getSurplusInfo();
-        row = list.size() > row ? list.size() : row;
+        // initView();
 
-        excelView.setAdapter(surplusAdapter = new FirstAdapter(list));
-        excelView.setBackgroundColor(Color.YELLOW);
-        Flog.d(TAG, "FirstFragment createView row:" + row + " col:" + col+" item:"+list.get(0));
-        excelView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                int width = (int) (2 * Math.random());
-                excelView.setDividerWidth(width);
-            }
-        }, 500);
+        initRowDataList();
+        initContentDataList();
+        initItemWidthList();
+
+        initAdapter();
+        pl_root.setAdapter(adapter);
     }
 
     @Override
     public void onChange() {
         super.onChange();
 
-        if (surplusAdapter == null) {
+        if (adapter == null) {
             return;
         }
 
-        List<ProductInfoBean> list = DatabaseManager.getInstance().getSurplusInfo();
-        surplusAdapter.notifyDataSetChanged();
-        Flog.d(TAG, "FirstFragment onChange list:" + (CollectionUtil.isEmpty(list) ? "0" : list.size()));
+        initContentDataList();
+        adapter.setContentBeanList(contentBeanList);
+        adapter.notifyDataSetChanged();
     }
 
-    class FirstAdapter extends ExcelView.ExcelAdapter {
-        private final List<ProductInfoBean> mList = new ArrayList<>();
+    private void initAdapter(){
 
-        public FirstAdapter(List<ProductInfoBean> list) {
-            if (CollectionUtil.isNotEmpty(list)) {
-                mList.addAll(list);
+        adapter = new AbstractDBPanelListAdapter(getActivity(), pl_root, lv_content) {
+            @Override
+            protected BaseAdapter getContentAdapter() {
+//                return new DBContentAdapter(getContext(), R.layout.defaultcontentitem, contentBeanList,
+//                        itemWidthList, 150, lv_content);
+                return null;
             }
-        }
+        };
 
-        public void updateData(List<ProductInfoBean> list) {
-            if (CollectionUtil.isNotEmpty(list)) {
-                mList.clear();
-                mList.addAll(list);
-                notifyDataSetChanged();
+//        adapter = new AbstractPanelListAdapter(getContext(), pl_root, lv_content) {
+//            @Override
+//            protected BaseAdapter getContentAdapter() {
+//                return null;
+//            }
+//        };
+        adapter.setSwipeRefreshEnabled(false);
+        adapter.setRowDataList(rowDataList);// must have
+        adapter.setTitle("example");// optional
+        // adapter.setOnRefreshListener(new CustomRefreshListener());// optional
+        adapter.setContentDataList(contentList);// must have
+        adapter.setContentBeanList(contentBeanList);
+        adapter.setItemWidthList(itemWidthList);// must have
+        adapter.setItemHeight(40);// optional, dp
+    }
+
+    private void initView() {
+        //设置listView为多选模式，长按自动触发
+        lv_content.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        lv_content.setMultiChoiceModeListener(new MultiChoiceModeCallback());
+
+        //listView的点击监听
+        lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "你选中的position为：" + position, Toast.LENGTH_SHORT).show();
             }
-        }
+        });
+    }
 
-        private static final int HORIZONTAL_TITLE = 1;
-        int newCount = 0;
-        private final SparseArray<Integer> colArr = new SparseArray<>();
+    public class CustomRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
+        @Override
+        public void onRefresh() {
+            // you can do sth here, for example: make a toast:
+            Toast.makeText(getActivity(), "custom SwipeRefresh listener", Toast.LENGTH_SHORT).show();
+            // don`t forget to call this
+            adapter.getSwipeRefreshLayout().setRefreshing(false);
+        }
+    }
+
+    /**
+     * 生成一份横向表头的内容
+     *
+     * @return List<String>
+     */
+    private void initRowDataList() {
+        rowDataList.addAll(Arrays.asList(ExcelUtils.getHeadNames(getContext())));
+    }
+
+    /**
+     * 初始化content数据
+     */
+    private void initContentDataList() {
+//        for (int i = 1; i <= 3; i++) {
+//            List<String> data = new ArrayList<>();
+//            data.add("第" + i + "行第一个");
+//            data.add("第" + i + "行第二个");
+//            data.add("第" + i + "行第三个");
+//            data.add("第" + i + "行第四个");
+//            data.add("第" + i + "行第五个");
+//            data.add("第" + i + "行第六个");
+//            data.add("第" + i + "行第七个");
+//            contentList.add(data);
+//        }
+
+        List<ProductInfoBean> list = DatabaseManager.getInstance().getSurplusInfo();
+        if (list != null && list.size() > 0) {
+            contentBeanList.clear();
+            contentBeanList.addAll(list);
+        }
+    }
+
+    /**
+     * 初始化 content 部分每一个 item 的每个数据的宽度
+     */
+    private void initItemWidthList() {
+        int[] widths = ExcelUtils.getHeadWidth(getContext());
+        itemWidthList.addAll(Arrays.asList(Arrays.stream(widths).boxed().toArray(Integer[]::new)));
+    }
+
+    /**
+     * 更新content数据源
+     */
+    private void changeContentDataList() {
+        contentList.clear();
+        for (int i = 1; i < 500; i++) {
+            List<String> data = new ArrayList<>();
+            data.add("第" + i + "第一个");
+            data.add("第" + i + "第二个");
+            data.add("第" + i + "第三个");
+            data.add("第" + i + "第四个");
+            data.add("第" + i + "第五个");
+            data.add("第" + i + "第六个");
+            data.add("第" + i + "第七个");
+            contentList.add(data);
+        }
+    }
+
+    /**
+     * 插入一个数据
+     */
+    private void insertData() {
+        List<String> data = new ArrayList<>();
+        data.add("插入1");
+        data.add("插入2");
+        data.add("插入3");
+        data.add("插入4");
+        data.add("插入5");
+        data.add("插入6");
+        data.add("插入7");
+        contentList.add(5, data);
+    }
+
+    /**
+     * 删除一个数据
+     */
+    private void removeData() {
+        contentList.remove(10);
+    }
+
+    /**
+     * 多选模式的监听器
+     */
+    private class MultiChoiceModeCallback implements ListView.MultiChoiceModeListener {
+
+        private View actionBarView;
+        private TextView tv_selectedCount;
+
+        /**
+         * 进入ActionMode时调用
+         * 可设置一些菜单
+         *
+         * @param mode
+         * @param menu
+         * @return
+         */
+//        @Override
+//        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+//            // menu
+//            getMenuInflater().inflate(R.menu.menu_multichoice, menu);
+//            // actionBar
+//            if (actionBarView == null) {
+//                actionBarView = LayoutInflater.from(MainActivity.this).inflate(R.layout.actionbar_listviewmultichoice, null);
+//                tv_selectedCount = (TextView) actionBarView.findViewById(R.id.id_tv_selectedCount);
+//            }
+//            mode.setCustomView(actionBarView);
+//            return true;
+//        }
 
         @Override
-        public ExcelView.Span querySpan(int row, int col) {
-            return null;
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        /**
+         * 和onCreateActionMode差不多的时机调用，不写逻辑
+         *
+         * @param mode
+         * @param menu
+         * @return
+         */
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
         }
 
         @Override
-        public int getColCount() {
-            return col;
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return false;
         }
 
+        /**
+         * 当ActionMode的菜单项被点击时
+         *
+         * @param mode
+         * @param item
+         * @return
+         */
+//        @Override
+//        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+//            switch (item.getItemId()) {
+//                case R.id.id_menu_selectAll:
+//                    for (int i = 0; i < lv_content.getAdapter().getCount(); i++) {
+//                        lv_content.setItemChecked(i, true);
+//                    }
+//                    tv_selectedCount.setText(String.valueOf(lv_content.getAdapter().getCount()));
+//                    break;
+//                case R.id.id_menu_draw:
+//                    //draw
+//                    SparseBooleanArray booleanArray = lv_content.getCheckedItemPositions();
+//                    Log.d("ybz", booleanArray.toString());
+//
+//                    List<Integer> checkedItemPositionList = new ArrayList<>();
+//                    for (int i = 0; i < contentList.size(); i++) {
+//                        if (lv_content.isItemChecked(i)) {
+//                            checkedItemPositionList.add(i);
+//                            Log.d("ybz", "被选中的item： " + i);
+//                        }
+//                    }
+//
+//                    StringBuilder checkedItemString = new StringBuilder();
+//                    for (int i = 0; i < checkedItemPositionList.size(); i++) {
+//                        checkedItemString.append(checkedItemPositionList.get(i) + ",");
+//                    }
+//
+//                    Toast.makeText(MainActivity.this, "你选中的position有：" + checkedItemString, Toast.LENGTH_SHORT).show();
+//                    break;
+//                default:
+//                    break;
+//            }
+//            return true;
+//        }
+
+        /**
+         * 退出ActionMode时调用
+         *
+         * @param mode
+         */
         @Override
-        public int getRowCount() {
-            return row;
+        public void onDestroyActionMode(ActionMode mode) {
+            lv_content.clearChoices();
         }
 
+        /**
+         * 当item的选中状态发生改变时调用
+         *
+         * @param mode
+         * @param position
+         * @param id
+         * @param checked
+         */
         @Override
-        public int getRowHeight(int row) {
-            return ExcelSize.DEFAULT_EXCEL_HEIGHT;
-        }
-
-        @Override
-        public int getColWidth(int col) {
-            Integer colWidth = colArr.get(col);
-            if (colWidth == null) {
-                return ExcelSize.DEFAULT_EXCEL_WIDTH;
-            }
-            return colWidth;
-        }
-
-        @Override
-        public int getCellViewType(int row, int col) {
-            if (row == 0) {
-                return HORIZONTAL_TITLE;
-            }
-            return 0;
-        }
-
-        @Override
-        public View getCellView(Context context, View convertView, int row, int col) {
-            if (getCellViewType(row, col) == 1) {
-                // head
-                if (convertView == null) {
-                    convertView = new TextView(context);
-                }
-                TextView tv = (TextView) convertView;
-                tv.setGravity(Gravity.CENTER);
-                for (int i = 0; i < headNameArr.length; i++) {
-                    if (i == col) {
-                        tv.setText(headNameArr[col]);
-
-                        if (TextUtils.equals(headNameArr[col], getString(R.string.col_date))) {
-                            colArr.append(col, ExcelSize.DEFAULT_EXCEL_WIDTH * 3);
-                        } else {
-                            colArr.append(col, ExcelSize.DEFAULT_EXCEL_WIDTH);
-                        }
-                        return convertView;
-                    }
-                }
-                return convertView;
-            }
-
-            if (convertView == null) {
-                convertView = new TextView(context);
-                convertView.setBackgroundColor(Color.YELLOW);
-                newCount++;
-                Log.i(TAG, "newCount=" + newCount);
-            }
-            TextView tv = (TextView) convertView;
-            tv.setGravity(Gravity.CENTER);
-
-            if (row < mList.size()) {
-                ProductInfoBean infoBean = mList.get(row - 1);
-                Flog.d(TAG, "infoBean:" + infoBean);
-                // <item>名称</item> <item>单价</item> <item>数量</item> <item>总价</item> <item>@string/col_date</item> <item>备注</item>
-                if (col == 0) {
-                    tv.setText(infoBean.getProduct_name());
-                } else if (col == 1) {
-                    tv.setText(infoBean.getProduct_price());
-                } else if (col == 2) {
-                    tv.setText(infoBean.getProduct_count());
-                } else if (col == 3) {
-                    tv.setText(infoBean.getProduct_total_price());
-                } else if (col == 4) {
-                    tv.setText(infoBean.getProduct_total_price());
-                } else if (col == 5) {
-                    tv.setText(infoBean.getInfo());
-                }
-            }
-
-//            String item = String.format("%d, %d", row, col);
-//            tv.setText(item);
-            Flog.e(TAG, "col:" + col + " row:" + row);
-            return convertView;
+        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+            int selectedCount = lv_content.getCheckedItemCount();
+            tv_selectedCount.setText(String.valueOf(selectedCount));
+            ((ArrayAdapter) lv_content.getAdapter()).notifyDataSetChanged();
         }
     }
 }

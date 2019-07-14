@@ -4,6 +4,7 @@ import com.lingrui.db_show.DdApplication;
 import com.lingrui.db_show.dbbean.InStockBean;
 import com.lingrui.db_show.dbbean.OutStockBean;
 import com.lingrui.db_show.dbbean.ProductInfoBean;
+import com.lingrui.db_show.dbbean.TestBean;
 import com.lingrui.db_show.util.CollectionUtil;
 import com.lingrui.db_show.util.Flog;
 
@@ -63,17 +64,43 @@ public class DatabaseManager {
         }
 
         Flog.d(TAG, "save InStockBean InStockBean:" + inStockBean);
+        DbManager dbManager = DdApplication.getInstance().getDbManager();
 
         try {
-            DdApplication.getInstance().getDbManager().save(inStockBean);
+            WhereBuilder builder = WhereBuilder.b();
+            builder.and("product_name", "=", inStockBean.getProduct_name());
+            builder.and("product_price", "=", inStockBean.getProduct_price());
+            ProductInfoBean infoBean = DatabaseManager.getInstance().getSurplusInfo(builder);
+            Flog.d(TAG, "save infoBean:"+infoBean);
+            if (infoBean == null) {
+                dbManager.save(inStockBean);
 
-            ProductInfoBean productInfoBean = new ProductInfoBean();
-            productInfoBean.setProduct_name(inStockBean.getProduct_name());
-            productInfoBean.setProduct_count(inStockBean.getProduct_count());
-            DdApplication.getInstance().getDbManager().save(productInfoBean);
+                ProductInfoBean productInfoBean = new ProductInfoBean();
+                productInfoBean.setProduct_name(inStockBean.getProduct_name());
+                productInfoBean.setProduct_count(inStockBean.getProduct_count());
+                productInfoBean.setProduct_price(inStockBean.getProduct_price());
+                productInfoBean.setProduct_total_price(inStockBean.getProduct_total_price());
+                productInfoBean.setProduct_time(inStockBean.getProduct_time());
+
+                DdApplication.getInstance().getDbManager().save(productInfoBean);
+            } else {
+                infoBean.setProduct_count(infoBean.getProduct_count()+inStockBean.getProduct_count());
+                infoBean.setProduct_price(infoBean.getProduct_total_price());
+                DdApplication.getInstance().getDbManager().update(infoBean);
+
+
+                ProductInfoBean productInfoBean = new ProductInfoBean();
+                productInfoBean.setProduct_name(infoBean.getProduct_name());
+                productInfoBean.setProduct_count(infoBean.getProduct_count());
+                productInfoBean.setProduct_price(infoBean.getProduct_price());
+                productInfoBean.setProduct_total_price(infoBean.getProduct_total_price());
+                productInfoBean.setProduct_time(infoBean.getProduct_time());
+                DdApplication.getInstance().getDbManager().save(productInfoBean);
+            }
         } catch (DbException e) {
             Flog.d(TAG, "save InStockBean one fail exception:" + e);
         }
+
     }
 
     public synchronized void addOutStock(OutStockBean outStockBean) {

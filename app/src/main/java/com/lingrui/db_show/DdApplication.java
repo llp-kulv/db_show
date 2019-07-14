@@ -42,7 +42,7 @@ public class DdApplication extends Application {
 
                     @Override
                     public void onTableCreated(DbManager db, TableEntity<?> table) {
-                        Flog.d(TAG, "onTableCreated");
+                        Flog.d(TAG, "onTableCreated "+table.getName());
                     }
                 })
 

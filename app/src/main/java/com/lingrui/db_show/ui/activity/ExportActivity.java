@@ -117,7 +117,7 @@ public class ExportActivity extends BaseActivity {
                 return;
             }
 
-            ExcelUtils.writeObjListToExcel(null, filePath, getApplication());
+            // ExcelUtils.writeObjListToExcel(null, filePath, getApplication());
             tipSuccess(filePath);
         } catch (Exception e) {
             tipFail();

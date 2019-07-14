@@ -92,4 +92,8 @@ public class KdActivityManager {
         return activity;
     }
 
+
+    public int getActiveSize() {
+        return mQueue.size();
+    }
 }
